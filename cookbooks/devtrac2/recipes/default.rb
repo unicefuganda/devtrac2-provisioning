@@ -15,7 +15,7 @@ end
 
 bash "install pip requirements" do 
 	cwd "/var/www/devtrac2"
-	code "pip install -r requirments.txt"
+	code "pip install -r requirements.txt"
 end
 
 conf_content = <<-eos
