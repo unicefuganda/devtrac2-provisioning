@@ -6,7 +6,7 @@
 #
 # All rights reserved - Do Not Redistribute
 
-SERVER_NAME = 127.0.0.1
+SERVER_NAME = "127.0.0.1"
 
 packages = %w{python-pip apache2.2 libapache2-mod-wsgi}
 
@@ -35,7 +35,11 @@ conf_content = <<-eos
         Allow from all
     </Directory>
 </VirtualHost>
-<< eos
+eos
+
+file "/etc/apache2/httpd.conf" do 
+	action :delete
+end
 
 file "/etc/apache2/httpd.conf" do 
 	content conf_content.gsub(/<SERVER_NAME>/, SERVER_NAME)
