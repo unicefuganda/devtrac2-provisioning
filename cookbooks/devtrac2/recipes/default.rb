@@ -1,11 +1,3 @@
-#
-# Cookbook Name:: devtrac2
-# Recipe:: default
-#
-# Copyright 2013, YOUR_COMPANY_NAME
-#
-# All rights reserved - Do Not Redistribute
-
 SERVER_NAME = "127.0.0.1"
 
 packages = %w{python-pip apache2.2 libapache2-mod-wsgi}
@@ -48,9 +40,19 @@ end
 
 file "/etc/apache2/httpd.conf" do 
 	content conf_content.gsub(/<SERVER_NAME>/, SERVER_NAME)
-	action :create_if_missing
+	action :create
 end
 
 bash "restart apache" do 
 	code "apache2ctl restart"
+end
+
+ruby_block "check provisioning worked" do
+	block do 
+		if Net::HTTP.get(URI("http://127.0.0.1/")) =~ /DevTrac2/
+			puts "Provisioning was successful"
+		else
+			puts "Provisioning failed"
+		end
+	end
 end
