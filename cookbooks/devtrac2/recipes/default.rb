@@ -6,3 +6,7 @@
 #
 # All rights reserved - Do Not Redistribute
 
+package "python-pip" { action :install }
+package "git" { action :install }
+package "apache2.2" { action :install }
+package "libapache2-mod-wsgi" { action :install }
