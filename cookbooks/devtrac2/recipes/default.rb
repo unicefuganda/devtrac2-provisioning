@@ -6,7 +6,10 @@
 #
 # All rights reserved - Do Not Redistribute
 
-package "python-pip" { action :install }
-package "git" { action :install }
-package "apache2.2" { action :install }
-package "libapache2-mod-wsgi" { action :install }
+packages = %w{python-pip git apache2.2 libapache2-mod-wsgi}
+
+packages.each do |package_name|
+	package package_name do
+		action :install 
+	end
+end
