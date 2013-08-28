@@ -21,6 +21,10 @@ git "/var/www/devtrac2" do
 	action :checkout
 end
 
+bash "install pip requirements" do 
+	code "pip install -r requirments.txt"
+end
+
 conf_content = <<-eos
 <VirtualHost *>
     ServerName <SERVER_NAME>
@@ -46,3 +50,6 @@ file "/etc/apache2/httpd.conf" do
 	action :create_if_missing
 end
 
+bash "restart apache" do 
+	code "apache2ctl restart"
+end
