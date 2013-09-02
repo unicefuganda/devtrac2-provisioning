@@ -1,6 +1,6 @@
 SERVER_NAME = "127.0.0.1"
 
-packages = %w{python-pip apache2.2 libapache2-mod-wsgi}
+packages = %w{python-pip apache2.2 libapache2-mod-wsgi build-essential python-dev mongodb-10gen}
 
 packages.each do |package_name|
 	package package_name do
@@ -16,6 +16,11 @@ end
 bash "install pip requirements" do 
 	cwd "/var/www/devtrac2"
 	code "pip install -r requirements.txt"
+end
+
+service "mongodb" do
+  supports :status => true, :restart => true, :reload => true
+  action [ :enable, :start ]
 end
 
 conf_content = <<-eos
