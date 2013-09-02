@@ -1,5 +1,19 @@
 SERVER_NAME = "127.0.0.1"
 
+bash "add mongo package repo " do
+  code "sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10"
+end
+
+bash "add mongo source list" do
+  code "echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list"
+end
+
+execute "apt-get-update" do
+  command "apt-get update"
+  ignore_failure true
+  action :nothing
+end
+
 packages = %w{python-pip apache2.2 libapache2-mod-wsgi build-essential python-dev mongodb-10gen}
 
 packages.each do |package_name|
