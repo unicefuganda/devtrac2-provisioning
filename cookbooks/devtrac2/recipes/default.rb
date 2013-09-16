@@ -45,6 +45,8 @@ conf_content = <<-eos
     Alias /static /var/www/devtrac2/static
     ExpiresDefault "access plus 1 hour"
 
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml application/javascript application/json text/css
+
     ErrorLog "/var/www/devtrac2/error.log"
     CustomLog "/var/www/devtrac2/access.log" combined
 
