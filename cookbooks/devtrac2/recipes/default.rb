@@ -42,10 +42,19 @@ conf_content = <<-eos
 
     WSGIDaemonProcess devtrac2 threads=5
     WSGIScriptAlias / /var/www/devtrac2/.wsgi
+    Alias /static /var/www/devtrac2/static
+
+    ErrorLog "/var/www/devtrac2/error.log"
+    CustomLog "/var/www/devtrac2/access.log" combined
 
     <Directory /var/www/devtrac2>
         WSGIProcessGroup devtrac2
         WSGIApplicationGroup %{GLOBAL}
+        Order deny,allow
+        Allow from all
+    </Directory>
+
+    <Directory /var/www/devtrac2/static>
         Order deny,allow
         Allow from all
     </Directory>
