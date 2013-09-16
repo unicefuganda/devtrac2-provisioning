@@ -43,6 +43,7 @@ conf_content = <<-eos
     WSGIDaemonProcess devtrac2 threads=5
     WSGIScriptAlias / /var/www/devtrac2/.wsgi
     Alias /static /var/www/devtrac2/static
+    ExpiresDefault "access plus 1 hour"
 
     ErrorLog "/var/www/devtrac2/error.log"
     CustomLog "/var/www/devtrac2/access.log" combined
