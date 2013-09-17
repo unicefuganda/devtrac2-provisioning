@@ -8,12 +8,19 @@ bash "add mongo source list" do
   code "echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list"
 end
 
+bash "add varish repo " do
+  code <<-EOH
+    curl http://repo.varnish-cache.org/debian/GPG-key.txt | sudo apt-key add -
+    echo "deb http://repo.varnish-cache.org/ubuntu/ precise varnish-3.0" | sudo tee -a /etc/apt/sources.list 
+  EOH
+end
+
 execute "apt-get-update" do
   command "apt-get update"
   action :run
 end
 
-packages = %w{python-pip apache2.2 libapache2-mod-wsgi build-essential python-dev mongodb-10gen}
+packages = %w{python-pip apache2.2 libapache2-mod-wsgi build-essential python-dev mongodb-10gen varnish}
 
 packages.each do |package_name|
 	package package_name do
@@ -63,6 +70,14 @@ conf_content = <<-eos
     </Directory>
 </VirtualHost>
 eos
+
+execute "enable expires" do
+  command "/usr/sbin/a2enmod mod_expires"
+end
+
+execute "enable compress" do
+  command "/usr/sbin/a2enmod mod_deflate"
+end
 
 file "/etc/apache2/httpd.conf" do 
 	action :delete
