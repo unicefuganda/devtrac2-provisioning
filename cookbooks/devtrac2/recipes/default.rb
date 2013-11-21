@@ -78,14 +78,14 @@ directory "/var/www/devtrac2/logs" do
   action :create
   owner "www-data"
   group "www-data"
-  mode 644
+  mode 1777
 end
 
 directory "/tmp/pdf" do
   action :create
   owner "www-data"
   group "www-data"
-  mode 644
+  mode 1777
 end
 
 file "/etc/apache2/httpd.conf" do 
