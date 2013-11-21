@@ -136,7 +136,7 @@ end
 ruby_block "check provisioning worked" do
 	block do 
 		if Net::HTTP.get(URI("http://127.0.0.1/")) =~ /DevTrac Global/
-			puts "\n\nProvisioning was successful"
+			puts "\n\nHome page works"
 		else
 			puts "\n\nProvisioning failed"
 		end
@@ -152,7 +152,7 @@ ruby_block "check can download pdf" do
       http.request(req)
     }
     if res.code == "200" && res['Content-Type'] == 'application/pdf'
-      puts "\n\nProvisioning was successful"
+      puts "\n\nDownload PDF works"
     else
       puts "\n\nProvisioning failed"
     end
