@@ -123,7 +123,7 @@ end
 
 ruby_block "check provisioning worked" do
 	block do 
-		if Net::HTTP.get(URI("http://127.0.0.1/")) =~ /DevTrac2/
+		if Net::HTTP.get(URI("http://127.0.0.1/")) =~ /DevTrac Global/
 			puts "\n\nProvisioning was successful"
 		else
 			puts "\n\nProvisioning failed"
