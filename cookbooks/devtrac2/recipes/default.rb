@@ -81,7 +81,21 @@ directory "/var/www/devtrac2/logs" do
   mode '1777'
 end
 
-directory "/tmp/pdf" do
+directory "/var/www/devtrac2/tmp/pdf" do
+  action :create
+  owner "www-data"
+  group "www-data"
+  mode '1777'
+end
+
+directory "/var/www/devtrac2/.webassets-cache" do
+  action :create
+  owner "www-data"
+  group "www-data"
+  mode '1777'
+end
+
+directory "/var/www/devtrac2/static/gen" do
   action :create
   owner "www-data"
   group "www-data"
@@ -101,9 +115,10 @@ execute "enable compress" do
   command "/usr/sbin/a2enmod deflate"
 end
 
+ENV['DEVTRAC_ENV'] = "Production"
 
-bash "restart apache" do 
-	code "apache2ctl restart"
+bash "restart apache" do
+  code "apache2ctl restart"
 end
 
 ruby_block "check provisioning worked" do
