@@ -121,6 +121,18 @@ bash "restart apache" do
   code "apache2ctl restart"
 end
 
+bash "install phantomjs" do
+  user "root"
+  cwd "/var"
+  code <<-EOH 
+    cd /var
+    curl -O https://phantomjs.googlecode.com/files/phantomjs-1.9.2-linux-x86_64.tar.bz2
+    tar -xvf phantomjs-1.9.2-linux-x86_64.tar.bz2
+    ln -s /var/phantomjs-1.9.2-linux-x86_64/bin/phantomjs /usr/bin/phantomjs
+    rm phantomjs-1.9.2-linux-x86_64.tar.bz2
+  EOH
+end
+
 ruby_block "check provisioning worked" do
 	block do 
 		if Net::HTTP.get(URI("http://127.0.0.1/")) =~ /DevTrac Global/
@@ -129,4 +141,21 @@ ruby_block "check provisioning worked" do
 			puts "\n\nProvisioning failed"
 		end
 	end
+end
+
+ruby_block "check can download pdf" do
+  block do 
+
+    url = URI.parse('http://127.0.0.1:5000/devtrac_report/uganda')
+    req = Net::HTTP::Get.new(url.path)
+    res = Net::HTTP.start(url.host, url.port) {|http|
+      http.request(req)
+    }
+    if res.code == "200" && res['Content-Type'] == 'application/pdf'
+      puts "\n\nProvisioning was successful"
+    else
+      puts "\n\nProvisioning failed"
+    end
+   
+  end
 end
