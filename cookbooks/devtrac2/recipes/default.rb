@@ -146,7 +146,7 @@ end
 ruby_block "check can download pdf" do
   block do 
 
-    url = URI.parse('http://127.0.0.1:5000/devtrac_report/uganda')
+    url = URI.parse('http://127.0.0.1/devtrac_report/uganda')
     req = Net::HTTP::Get.new(url.path)
     res = Net::HTTP.start(url.host, url.port) {|http|
       http.request(req)
