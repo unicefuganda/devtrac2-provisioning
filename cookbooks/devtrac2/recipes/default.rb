@@ -118,7 +118,10 @@ end
 ENV['DEVTRAC_ENV'] = "Production"
 
 bash "restart apache" do
-  code "apache2ctl restart"
+  code <<-EOH
+    apache2ctl stop
+    apache2ctl start
+  EOH
 end
 
 bash "install phantomjs" do
