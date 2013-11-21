@@ -42,7 +42,7 @@ conf_content = <<-eos
 <VirtualHost *>
     ServerName <SERVER_NAME>
     SetEnv DEVTRAC_ENV "Production"
-    WSGIDaemonProcess devtrac2 threads=5
+    WSGIDaemonProcess devtrac2 threads=5 home=/var/www/devtrac2
     WSGIScriptAlias / /var/www/devtrac2/.wsgi
 
     SetEnv demo.templates /usr/local/wsgi/templates
