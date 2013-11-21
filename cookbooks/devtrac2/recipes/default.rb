@@ -75,7 +75,7 @@ file "/etc/apache2/httpd.conf" do
 end
 
 file "/etc/apache2/httpd.conf" do 
-	content conf_content.gsub(/<SERVER_NAME>/, SERVER_NAME)
+	content conf_content.gsub(/<SERVER_NAME>/,  node['SERVER_NAME'])
 	action :create
 end
 

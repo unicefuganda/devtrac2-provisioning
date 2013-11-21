@@ -4,9 +4,5 @@
     "SERVER_NAME": "192.237.180.109"
   },
   "json_class": "Chef::Environment",
-    "description": "",
-    "cookbook_versions": {
-    "devtrav2": "= 0.1.0"
-  },
   "chef_type": "environment"
 }
