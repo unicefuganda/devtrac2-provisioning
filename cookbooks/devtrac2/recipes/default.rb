@@ -46,6 +46,7 @@ conf_content = <<-eos
     WSGIScriptAlias / /var/www/devtrac2/.wsgi
 
     SetEnv demo.templates /usr/local/wsgi/templates
+    SetEnv SERVER_NAME <SERVER_NAME>
     
     Alias /static /var/www/devtrac2/static
     ExpiresDefault "access plus 1 hour"
