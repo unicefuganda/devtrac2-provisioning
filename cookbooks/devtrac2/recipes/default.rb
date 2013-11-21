@@ -88,7 +88,7 @@ directory "/var/www/devtrac2/tmp/pdf" do
   recursive true
 end
 
-directory "/var/www/devtrac2/.webassets-cache" do
+directory "/var/www/devtrac2/static/.webassets-cache" do
   action :create
   owner "www-data"
   group "www-data"
