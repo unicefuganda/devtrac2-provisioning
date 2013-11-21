@@ -74,6 +74,20 @@ file "/etc/apache2/httpd.conf" do
 	action :delete
 end
 
+directory "/var/www/devtrac2/logs" do
+  action :create
+  owner "www-data"
+  group "www-data"
+  mode 644
+end
+
+directory "/tmp/pdf" do
+  action :create
+  owner "www-data"
+  group "www-data"
+  mode 644
+end
+
 file "/etc/apache2/httpd.conf" do 
 	content conf_content.gsub(/<SERVER_NAME>/,  node['SERVER_NAME'])
 	action :create
