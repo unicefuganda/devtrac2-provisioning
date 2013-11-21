@@ -1,3 +1,5 @@
+# need to phantomjs to this
+
 SERVER_NAME = "127.0.0.1"
 
 bash "add mongo package repo " do
@@ -8,19 +10,12 @@ bash "add mongo source list" do
   code "echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list"
 end
 
-bash "add varish repo " do
-  code <<-EOH
-    curl http://repo.varnish-cache.org/debian/GPG-key.txt | sudo apt-key add -
-    echo "deb http://repo.varnish-cache.org/ubuntu/ precise varnish-3.0" | sudo tee -a /etc/apt/sources.list 
-  EOH
-end
-
 execute "apt-get-update" do
   command "apt-get update"
   action :run
 end
 
-packages = %w{python-pip apache2.2 libapache2-mod-wsgi build-essential python-dev mongodb-10gen varnish}
+packages = %w{python-pip apache2.2 libapache2-mod-wsgi build-essential python-dev mongodb-10gen}
 
 packages.each do |package_name|
 	package package_name do
@@ -46,9 +41,12 @@ end
 conf_content = <<-eos
 <VirtualHost *>
     ServerName <SERVER_NAME>
-
+    SetEnv DEVTRAC_ENV "Production"
     WSGIDaemonProcess devtrac2 threads=5
     WSGIScriptAlias / /var/www/devtrac2/.wsgi
+
+    SetEnv demo.templates /usr/local/wsgi/templates
+    
     Alias /static /var/www/devtrac2/static
     ExpiresDefault "access plus 1 hour"
 
@@ -71,14 +69,6 @@ conf_content = <<-eos
 </VirtualHost>
 eos
 
-execute "enable expires" do
-  command "/usr/sbin/a2enmod mod_expires"
-end
-
-execute "enable compress" do
-  command "/usr/sbin/a2enmod mod_deflate"
-end
-
 file "/etc/apache2/httpd.conf" do 
 	action :delete
 end
@@ -87,6 +77,15 @@ file "/etc/apache2/httpd.conf" do
 	content conf_content.gsub(/<SERVER_NAME>/, SERVER_NAME)
 	action :create
 end
+
+execute "enable expires" do
+  command "/usr/sbin/a2enmod expires"
+end
+
+execute "enable compress" do
+  command "/usr/sbin/a2enmod deflate"
+end
+
 
 bash "restart apache" do 
 	code "apache2ctl restart"

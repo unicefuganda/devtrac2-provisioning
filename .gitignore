@@ -1,3 +1,5 @@
 *.pid
 *.out
 *.pyc
+*.sublime-project
+*.sublime-workspace
