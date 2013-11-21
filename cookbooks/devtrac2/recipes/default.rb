@@ -14,7 +14,7 @@ execute "apt-get-update" do
   action :run
 end
 
-packages = %w{python-pip apache2.2 libapache2-mod-wsgi build-essential python-dev mongodb-10gen}
+packages = %w{python-pip apache2.2 libapache2-mod-wsgi build-essential python-dev mongodb-10gen freetype-devel fontconfig-devel}
 
 packages.each do |package_name|
 	package package_name do
