@@ -85,6 +85,7 @@ directory "/var/www/devtrac2/tmp/pdf" do
   owner "www-data"
   group "www-data"
   mode '1777'
+  recursive true
 end
 
 directory "/var/www/devtrac2/.webassets-cache" do
