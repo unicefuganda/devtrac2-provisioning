@@ -1,6 +1,5 @@
 # need to phantomjs to this
-
-SERVER_NAME = "127.0.0.1"
+ENV['DEVTRAC_ENV'] = "Production"
 
 bash "add mongo package repo " do
   code "sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10"
