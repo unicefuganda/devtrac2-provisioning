@@ -165,16 +165,6 @@ execute "enable compress" do
   command "/usr/sbin/a2enmod deflate"
 end
 
-bash "stop apache" do
-  code "apache2ctl stop"
-end
-
-sleep 2
-
-bash "start apache" do
-  code "apache2ctl start"
-end
-
 service "mongodb" do
   action [:enable, :start]
 end
@@ -190,6 +180,20 @@ bash "install phantomjs" do
     rm phantomjs-1.9.2-linux-x86_64.tar.bz2
   EOH
 end
+
+sleep 10
+
+bash "stop apache" do
+  code "apache2ctl stop"
+end
+
+sleep 10
+
+bash "start apache" do
+  code "apache2ctl start"
+end
+
+sleep 10
 
 ruby_block "check provisioning worked" do
 	block do 
