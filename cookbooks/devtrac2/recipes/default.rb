@@ -14,7 +14,7 @@ execute "apt-get-update" do
   action :run
 end
 
-packages = %w{python-pip apache2.2 libapache2-mod-wsgi build-essential python-dev mongodb-10gen libfontconfig}
+packages = %w{python-pip apache2.2 libapache2-mod-wsgi build-essential python-dev mongodb-10gen libfontconfig libgeos-dev}
 
 packages.each do |package_name|
 	package package_name do
@@ -69,8 +69,63 @@ conf_content = <<-eos
 </VirtualHost>
 eos
 
+
+envvars_content = <<-eos
+
+unset HOME
+
+# for supporting multiple apache2 instances
+if [ "${APACHE_CONFDIR##/etc/apache2-}" != "${APACHE_CONFDIR}" ] ; then
+        SUFFIX="-${APACHE_CONFDIR##/etc/apache2-}"
+else
+        SUFFIX=
+fi
+
+# Since there is no sane way to get the parsed apache2 config in scripts, some
+# settings are defined via environment variables and then used in apache2ctl,
+# /etc/init.d/apache2, /etc/logrotate.d/apache2, etc.
+export APACHE_RUN_USER=www-data
+export APACHE_RUN_GROUP=www-data
+export APACHE_PID_FILE=/var/run/apache2$SUFFIX.pid
+export APACHE_RUN_DIR=/var/run/apache2$SUFFIX
+export APACHE_LOCK_DIR=/var/lock/apache2$SUFFIX
+# Only /var/log/apache2 is handled by /etc/logrotate.d/apache2.
+export APACHE_LOG_DIR=/var/log/apache2$SUFFIX
+
+## The locale used by some modules like mod_dav
+export LANG=C
+## Uncomment the following line to use the system default locale instead:
+#. /etc/default/locale
+
+export LANG
+
+## The command to get the status for 'apache2ctl status'.
+## Some packages providing 'www-browser' need '--dump' instead of '-dump'.
+#export APACHE_LYNX='www-browser -dump'
+
+## If you need a higher file descriptor limit, uncomment and adjust the
+## following line (default is 8192):
+#APACHE_ULIMIT_MAX_FILES='ulimit -n 65536'
+export DEVTRAC_ENV=Production
+
+eos
+
 file "/etc/apache2/httpd.conf" do 
 	action :delete
+end
+
+file "/etc/apache2/envvars" do 
+  action :delete
+end
+
+file "/etc/apache2/httpd.conf" do 
+	content conf_content.gsub(/<SERVER_NAME>/,  node['SERVER_NAME'])
+	action :create
+end
+
+file "/etc/apache2/envvars" do 
+  content envvars_content
+  action :create
 end
 
 directory "/var/www/devtrac2/logs" do
@@ -102,11 +157,6 @@ directory "/var/www/devtrac2/static/gen" do
   mode '1777'
 end
 
-file "/etc/apache2/httpd.conf" do 
-	content conf_content.gsub(/<SERVER_NAME>/,  node['SERVER_NAME'])
-	action :create
-end
-
 execute "enable expires" do
   command "/usr/sbin/a2enmod expires"
 end
@@ -115,13 +165,12 @@ execute "enable compress" do
   command "/usr/sbin/a2enmod deflate"
 end
 
-ENV['DEVTRAC_ENV'] = "Production"
-
 bash "restart apache" do
-  code <<-EOH
-    apache2ctl stop
-    apache2ctl start
-  EOH
+  code "apache2ctl restart"
+end
+
+service "mongodb" do
+  action [:enable, :start]
 end
 
 bash "install phantomjs" do
