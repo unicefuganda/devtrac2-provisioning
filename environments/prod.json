@@ -1,0 +1,8 @@
+{
+  "name": "prod",
+  "default_attributes": {
+    "SERVER_NAME": "www.devtracglobal.org"
+  },
+  "json_class": "Chef::Environment",
+  "chef_type": "environment"
+}

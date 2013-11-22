@@ -1,5 +1,5 @@
 {
-  "name": "uat",
+  "name": "qa",
   "default_attributes": {
     "SERVER_NAME": "192.237.180.109"
   },
