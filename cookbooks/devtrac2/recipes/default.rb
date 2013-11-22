@@ -181,19 +181,23 @@ bash "install phantomjs" do
   EOH
 end
 
-sleep 10
-
-bash "stop apache" do
-  code "apache2ctl stop"
+service "apache2" do
+  action [:enable, :stop, :start]
 end
 
-sleep 10
+# sleep 10
 
-bash "start apache" do
-  code "apache2ctl start"
-end
+# bash "stop apache" do
+#   code "apache2ctl stop"
+# end
 
-sleep 10
+# sleep 10
+
+# bash "start apache" do
+#   code "apache2ctl start"
+# end
+
+# sleep 10
 
 ruby_block "check provisioning worked" do
 	block do 
