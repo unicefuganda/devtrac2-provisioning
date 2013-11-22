@@ -165,8 +165,14 @@ execute "enable compress" do
   command "/usr/sbin/a2enmod deflate"
 end
 
-bash "restart apache" do
-  code "apache2ctl restart"
+bash "stop apache" do
+  code "apache2ctl stop"
+end
+
+sleep 2
+
+bash "start apache" do
+  code "apache2ctl start"
 end
 
 service "mongodb" do
